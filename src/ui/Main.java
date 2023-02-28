@@ -22,22 +22,32 @@ public class Main {
 
     }
 
-    public static void initializeGame(){
+    public static boolean initializeGame(){
+        boolean start = false;
         System.out.println("Welcome to our game 'Snakes and Ladders' \n please chose one option");
         System.out.println(" - 1 Play");
         System.out.println(" - 2 End Game");
-        read
+        int option = read.nextInt();
+        if(option!= 1){
+            System.out.println("The game has ended");
+            return start;
+        }else{
+            return start = true;
+
+        }
+
 
 
     }
 
     public void menu(){
-        boolean inGame = true;
+        boolean inGame = initializeGame();
         if(inGame == false){
             System.out.println("The game has ended");
         }else{
             while(inGame){
-
+                System.out.println("The game has started");
+                System.out.println("Choose one of the next options ");
             }
         }
         
