@@ -1,5 +1,6 @@
 import java.util.Scanner;
 
+
 import model.*;
 
 public class Main {
@@ -9,6 +10,13 @@ public class Main {
     private static Main gameApp;
 
     private Controler gameControler;
+
+    public static void main(String[] args) {
+        
+        addControler();
+
+        initializeGame();
+    }
 
     public Main(){
 
@@ -22,7 +30,7 @@ public class Main {
 
     }
 
-    public static boolean initializeGame(){
+    public static void initializeGame(){
         boolean start = false;
         System.out.println("Welcome to our game 'Snakes and Ladders' \n please chose one option");
         System.out.println(" - 1 Play");
@@ -30,9 +38,9 @@ public class Main {
         int option = read.nextInt();
         if(option!= 1){
             System.out.println("The game has ended");
-            return start;
         }else{
-            return start = true;
+            start = true;
+            gameApp.menu(start);
 
         }
 
@@ -40,20 +48,59 @@ public class Main {
 
     }
 
-    public void menu(){
-        boolean inGame = initializeGame();
+    public void menu(boolean start){
+        gameApp.addPlayers();
+        System.out.println(gameControler.showPlayers(0)); 
+        boolean inGame = start;
         if(inGame == false){
             System.out.println("The game has ended");
         }else{
             while(inGame){
                 System.out.println("The game has started");
                 System.out.println("Choose one of the next options ");
+                System.out.println(" - 1 ");
+                System.out.println(" - 2 ");
+                int option = read.nextInt();
             }
         }
         
+    }
 
+    public void addPlayers(){
+        System.out.println("Only three players can play the game simultaneously");
+        System.out.println("Choose the amount of players that are going to play");
+        int numPlayers = read.nextInt();
+        read.nextLine();
+        if(numPlayers>3 || numPlayers <0){
+            System.out.println("Choose a valid option");
+            addPlayers();
+        }else{
+            int counter = 0; 
+            gameControler.initializeCollection(numPlayers);
+            initializeCollection(numPlayers, counter);
+        }
 
     }
+
+    public void initializeCollection(int numPlayers, int counter){
+
+        if(counter<numPlayers){
+
+            System.out.println("Type the name of the player");
+            
+            String name = read.nextLine(); 
+
+            gameControler.addPlayerCollection(numPlayers, name, counter);
+
+            initializeCollection(numPlayers, counter+1);
+
+        } else{
+
+            System.out.println("The players have been created sucesfully");
+        }
+
+    }
+
 
     
     public static Main getGameApp() {
