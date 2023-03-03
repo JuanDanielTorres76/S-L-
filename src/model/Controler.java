@@ -8,8 +8,9 @@ public class Controler {
 
     public Controler(){
 
-    }
+        listy = new DoubleLinkedList();
 
+    }
 
     public String showPlayers(int counter){
 
@@ -81,5 +82,22 @@ public class Controler {
 
     }
 
+    public void addNodes(int rows, int columns){
+
+        int totalNodes = rows*columns, counter = 1;
+
+        listy.createNodes(totalNodes, counter);       
+
+    }
+
+    public String showBoard(){
+
+        String nodes = " "; int value = 1;
+
+        nodes = listy.showNodes(value, listy.getHead());
+
+        return nodes;
+        
+    }
 
 }
