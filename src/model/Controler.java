@@ -6,9 +6,9 @@ public class Controler {
 
     protected Player[] players;
 
-    public Controler(){
+    public Controler(int cVal, int fVal ){
 
-        listy = new DoubleLinkedList();
+        listy = new DoubleLinkedList(cVal, fVal);
 
     }
 
@@ -32,18 +32,14 @@ public class Controler {
 
                 return counter+1 + "- " + players[counter].toString();
 
-
             }
-            
-   
-
+    
         }else{
 
             return "Limit of players reached"; 
         }
 
     }
-
 
     public void initializeCollection(int numPlayers){
 
@@ -82,7 +78,9 @@ public class Controler {
 
     }
 
-    public void addNodes(int rows, int columns){
+    public void addNodes(){
+
+        int rows = listy.getfVal(), columns = listy.getcVal();
 
         int totalNodes = rows*columns, counter = 1;
 
@@ -90,14 +88,14 @@ public class Controler {
 
     }
 
-    public String showBoard(){
+    public String showBoardByRows(){
 
-        String nodes = " "; int value = 1;
+        int value = listy.getfVal()*listy.getcVal();
 
-        nodes = listy.showNodes(value, listy.getHead());
+        String board = listy.invokeBoard(value, listy.getcVal());
 
-        return nodes;
-        
+        return board;
+
     }
 
 }

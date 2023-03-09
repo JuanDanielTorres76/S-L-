@@ -11,21 +11,27 @@ public class Main {
     private Controler gameControler;
 
     public static void main(String[] args) {
-        
-        addControler();
 
         initializeGame();
     }
 
-    public Main(){
+    public Main(int cVal, int fVal){
 
-        gameControler = new Controler();
+        gameControler = new Controler(cVal, fVal);
 
     }
 
     public static void addControler(){
 
-        gameApp = new Main();
+        System.out.println("Type the columns of the board ");
+
+        int cVal = read.nextInt();
+
+        System.out.println("Now the rows ");
+
+        int fVal = read.nextInt();
+
+        gameApp = new Main(cVal, fVal);
 
     }
 
@@ -49,6 +55,8 @@ public class Main {
             
             start = true;
 
+            addControler();
+
             gameApp.menu(start);
 
         }
@@ -57,23 +65,19 @@ public class Main {
 
     public void createGameBoard(){
 
-        System.out.println("Write the rows that the board will have \n Remember the maximum value is 10 ");  
-        
-        int rows = read.nextInt();
+        gameControler.addNodes();
 
-        System.out.println("Now the columns");
-
-        int columns = read.nextInt();
-
-        gameControler.addNodes(rows, columns);
+        showBoard();
 
     }
 
     public void showBoard(){
 
-        String board = gameControler.showBoard();
+        System.out.println("This is the gameboard");
 
-        System.out.println(board);
+        String gameBoard = gameControler.showBoardByRows();
+
+        System.out.println(gameBoard);
 
     }
 
