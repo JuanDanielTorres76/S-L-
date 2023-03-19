@@ -89,6 +89,8 @@ public class Main {
 
         System.out.println(gameControler.showPlayers(0)); 
 
+        gameApp.createComodins();
+
         boolean inGame = start;
 
         if(inGame == false){
@@ -105,7 +107,7 @@ public class Main {
 
                 System.out.println(" - 1 Show the board");
 
-                System.out.println(" - 2 ");
+                System.out.println(" - 2 Show comodin Board");
 
                 int option = read.nextInt();
 
@@ -115,7 +117,7 @@ public class Main {
 
                         break;
                     
-                    case 2:
+                    case 2: gameApp.showComodins();
 
                         break;
 
@@ -137,9 +139,9 @@ public class Main {
 
     public void addPlayers(){
 
-        System.out.println("Only three players can play the game simultaneously");
+        System.out.println(" - Only three players can play the game simultaneously");
 
-        System.out.println("Choose the amount of players that are going to play");
+        System.out.println(" - Choose the amount of players that are going to play");
 
         int numPlayers = read.nextInt();
 
@@ -167,7 +169,7 @@ public class Main {
 
         if(counter<numPlayers){
 
-            System.out.println("Type the name of the player");
+            System.out.println(" Type the name of the player");
             
             String name = read.nextLine(); 
 
@@ -177,9 +179,109 @@ public class Main {
 
         } else{
 
-            System.out.println("The players have been created sucesfully");
+            System.out.println(" The players have been created sucesfully");
         }
 
+    }
+
+    public void createComodins(){
+
+        int numSnakes = createSnakes();
+        
+        int numLadders = createLadders();
+
+        gameControler.createComodins(numSnakes, numLadders);
+
+    }
+
+    public int createSnakes(){
+
+        System.out.println(" - Type the number of Snakes that will be created");
+
+        System.out.println(" - Remeber that them have to be proporcional to the size of the board ");
+
+        System.out.println(" - The max amount of Ladders that can be created are 5 ");
+
+        System.out.println(" - Type 6 if you want to read the specifications");
+
+        int numSnakes = read.nextInt();
+
+        if(numSnakes == 6){
+
+            System.out.println(" - The snake created will only be 1 if: ");
+
+            System.out.println(" 1 - The amount of the snakes is higher than the amount of columns ans Rows of the board ");
+
+            System.out.println(" 2 - The space between Snakes of the board is lesser than 3 if the snakes are created");
+
+            createSnakes();
+
+        }else if(numSnakes > 5){
+
+            System.out.println("Type a valid option");
+
+            createSnakes();
+
+        }else{
+
+            numSnakes = gameControler.specifyComodins(numSnakes);
+
+            System.out.println(" - The Snakes that are gonna be created according to the specifications are " + numSnakes);
+
+        }
+        return numSnakes;
+
+    }
+
+    public int createLadders(){
+
+        System.out.println(" - Type the number of Ladders that will be created");
+
+        System.out.println(" - Remeber that them have to be proporcional to the size of the board ");
+
+        System.out.println(" - The max amount of Ladders that can be created are 5 ");
+
+        System.out.println(" - Type 6 if you want to read the specifications");
+
+        int numLadders = read.nextInt();
+
+        if(numLadders == 6){
+
+            System.out.println(" - The Ladders created will only be 1 if: ");
+
+            System.out.println(" 1 - The amount of the Ladders is higher than the amount of columns ans Rows of the board ");
+
+            System.out.println(" 2 - The space between Ladders of the board is lesser than 3 if the ladders are created");
+
+            createLadders();
+
+        }
+
+        if(numLadders>5){
+
+            System.out.println("Type a valid option");
+
+            createLadders();
+
+        }else{
+
+            numLadders = gameControler.specifyComodins(numLadders);
+
+            System.out.println("The ladders that are gonna be created according to the specifications are " + numLadders);
+
+        }
+
+        return numLadders;
+
+    }
+
+    public void showComodins(){
+
+        System.out.println("Those are the commodins of the gameboard");
+        
+        String board = gameControler.showComodins();
+
+        System.out.println(board);
     }
 
     public static Main getGameApp() {

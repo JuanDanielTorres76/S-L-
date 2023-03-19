@@ -8,6 +8,8 @@ public class Node {
 
     private int value;
 
+    private Comodin comodin; 
+
     public Node(int value){
 
         this.value = value;
@@ -15,6 +17,8 @@ public class Node {
         next = null;
 
         previous = null;
+
+        comodin = null;
 
     }
 
@@ -54,4 +58,12 @@ public class Node {
 
     }
 
+    public Comodin getComodin() {
+        return comodin;
+    }
+
+    public void setComodin(Comodin comodin) {
+        this.comodin = comodin;
+    }
+  
 }
