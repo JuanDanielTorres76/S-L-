@@ -12,6 +12,10 @@ public class DoubleLinkedList {
 
     private int fVal;
 
+    private Snake snakeList[];
+
+    private Ladder ladderList[];
+
     public DoubleLinkedList(int cVal, int fVal){
 
         tail = null;
@@ -106,6 +110,141 @@ public class DoubleLinkedList {
         return board;
 
     }
+
+    public String invokeComodinBoard(int value, int cValue){
+
+        String board = printComodins(value, cValue, tail, true);
+
+        return board;
+
+    }
+
+    public String printComodins(int value, int cVal, Node pointer, boolean st){
+
+        String board = "";
+
+        if(pointer != null){
+
+            if(pointer.getValue() == value && st == true){
+                
+                if(pointer.getValue() == tail.getValue()){
+
+                    board +=  " [ - ] ";
+
+                    board += printComodins(value-1, cVal, pointer.getPrevious(), st);
+
+                } else if(value == head.getValue()){
+
+                    board += " [ - ] ";
+
+                }else if(value%cVal == 0 && value != tail.getValue()){
+
+                    st = false; 
+
+                    board += " \n";
+
+                    board += printComodinOfSearchedNode(head, value);
+
+                    board += printComodins(value-1, cVal, pointer.getPrevious(), st);
+
+                }else{
+
+                    board += printComodinOfSearchedNode(head, value); 
+
+                    board += printComodins(value-1, cVal, pointer.getPrevious(), st);
+
+                }
+
+            }else if(pointer.getValue() == value && st == false){
+
+                if(value == head.getValue()){
+
+                    int value3 = getValueForBk(value, cVal, cVal, st);
+
+                    board += printComodinOfSearchedNode(head, value3);
+
+                }else if(value != tail.getValue() && value%cVal != 0){
+
+                    int value3 = getValueForBk(value, cVal, value, st);
+
+                    if(value3>0){
+                    
+                        board += printComodinOfSearchedNode(head, value3);
+
+                    }
+
+                    board += printComodins(value-1, cVal, pointer.getPrevious(), st);
+
+                }else if(value != tail.getValue() && value%cVal == 0){
+
+                    st = true;
+
+                    board += " \n";
+
+                    int value3 = getValueForBk(value, cVal, value, st);
+
+                    if(value3>0){
+                    
+                        board += printComodinOfSearchedNode(head, value3);
+
+                    }
+
+                    board += printComodins(value-1, cVal, pointer.getPrevious(), st);
+
+                }
+
+            }
+
+        }
+
+        return board;
+
+    }
+
+    public String printComodinOfSearchedNode(Node pointer, int value ){
+
+        String extention = "";
+
+        if(pointer.getValue() != value){
+
+            extention = printComodinOfSearchedNode(pointer.getNext(), value);
+
+        }else{
+
+            if(pointer.getComodin() == null){
+
+                System.out.println("El comodin es nulo");
+
+                extention = " [ - ] ";
+    
+            }else{
+
+                if(pointer.getComodin() instanceof Snake){
+
+                    Snake obj = (Snake)pointer.getComodin();
+
+                    System.out.println("Identifier: " + obj.getIdentifier());
+
+                    extention = " [ " + obj.getIdentifier() + " ] ";
+
+                }else{
+
+                    Ladder obj = (Ladder)pointer.getComodin();
+
+                    System.out.println("Identifier: " + obj.getIdentifier());
+
+                    extention = " [ " + obj.getIdentifier() + " ] ";
+
+                }
+
+            }
+
+        }
+
+        return extention;
+
+    }
+
 
     public String showNdBoardByRows(int value, Node node, int cVal, boolean st){
 
@@ -282,6 +421,191 @@ public class DoubleLinkedList {
         return ans;
 
     }
+
+    public void createSnakeArray(int numSnakes){
+
+        snakeList = new Snake[numSnakes];
+
+    }
+
+    public void createLadderArray(int numLadders){
+
+        ladderList = new Ladder[numLadders];
+    }
+
+    public void assignNodeBeggining(int value, Node pointer, Comodin cn){
+
+        if(pointer.getValue() != value){
+
+            assignNodeBeggining(value, pointer.getNext(), cn);
+
+        }else{
+
+            cn.setBeggining(pointer);
+
+        }
+
+    }
+
+    public void assignNodeEnd(int value, Node pointer, Comodin cn ){
+
+        if(pointer.getValue() != value){
+
+            assignNodeEnd(value, pointer.getNext(), cn);
+
+        }else{
+
+            cn.setEnd(pointer);
+
+        }
+
+    }
+
+    public String assignID(int numSnake){
+
+        numSnake++;
+
+        String ch;
+
+        switch(numSnake){
+
+            case 1:
+
+                ch = "A";
+
+                break;
+
+            case 2:
+
+                ch = "B";
+
+                break;
+
+            case 3:
+
+                ch = "C";
+
+                break;
+
+            case 4:
+
+                ch = "D";
+
+                break;
+
+            case 5:
+
+                ch = "E";
+
+                break;
+            
+            default:
+
+                ch = "Z";
+
+                break;
+        }
+
+        return ch;
+
+    }
+
+    public void changeNodeStatus(Node pointer, int value, Comodin cm){
+
+        if(pointer.getValue() != value){
+        
+            changeNodeStatus(pointer.getNext(), value, cm);
+
+        }else{
+
+            pointer.setComodin(cm);
+
+            System.out.println("Node " + pointer.getValue() + " : " + pointer.getComodin().getBeggining().getValue() + " : " + pointer.getComodin().getEnd().getValue() );
+
+        }
+
+    }
+
+    public void instanceLadders(int beggining, int end, int ladderCounter){
+
+        System.out.println("listy.instanceLadders runnning");
+
+        ladderList[ladderCounter] = new Ladder(ladderCounter+1);
+
+        System.out.println( "Ladder id: " + ladderList[ladderCounter].getIdentifier()); // ver el identifier
+
+        assignNodeBeggining(beggining, head, ladderList[ladderCounter]);
+
+        System.out.println("Beggining of Ladder " + ladderList[ladderCounter].getBeggining().getValue());
+
+        assignNodeEnd(end, head, ladderList[ladderCounter]);
+
+        System.out.println("End of Ladder " + ladderList[ladderCounter].getEnd().getValue());
+
+        changeNodeStatus(head, beggining, ladderList[ladderCounter]);
+
+        changeNodeStatus(head, end, ladderList[ladderCounter]);
+
+    }
+
+    public void instanceSnakes(int headvalue, int tailValue, int snakeCounter){
+
+        System.out.println("listy.instanceSnakes runnning");
+
+        String identifier = assignID(snakeCounter);
+
+        snakeList[snakeCounter] = new Snake(identifier);
+
+        System.out.println("Snake id: " + snakeList[snakeCounter].getIdentifier());
+
+        assignNodeBeggining(tailValue, head, snakeList[snakeCounter]);
+
+        System.out.println("Tail of Snake: " + snakeList[snakeCounter].getBeggining().getValue());
+
+        assignNodeEnd(headvalue, head, snakeList[snakeCounter]);
+
+        System.out.println("Head of Snake: " + snakeList[snakeCounter].getEnd().getValue());
+
+        changeNodeStatus(head, headvalue, snakeList[snakeCounter]);
+
+        changeNodeStatus(head, tailValue, snakeList[snakeCounter]);
+
+    }
+
+    public boolean validationOfComodin(int value){
+
+        boolean validation = false;
+
+        Comodin nodeComodin = getComodinFromNode(head, value);
+
+        if(nodeComodin == null){
+
+            validation = true;
+
+        }
+
+        return validation;
+
+    }
+
+    public Comodin getComodinFromNode(Node node, int value){
+
+        Comodin ans = null;
+
+        if(value != node.getValue()){
+
+            getComodinFromNode(node.getNext(), value);
+
+        }else {
+
+            ans = node.getComodin();
+
+        }
+
+        return ans;
+
+    }
+
 
     public Node getTail() {
 
