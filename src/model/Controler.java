@@ -43,6 +43,48 @@ public class Controler {
 
     }
 
+    public String showPly(int ply){
+
+        String ans = "";
+
+        if(ply<players.length){
+
+            ans = players[ply].getToken(); 
+
+        }
+
+        return ans;
+
+    }
+
+    public int verifyTurns(int ply){
+
+        if(ply< players.length){
+
+            return ply;
+
+        }else{
+
+            ply = 0;
+
+            return ply;
+
+        }
+
+    }
+
+    public String movePlayer(int PlayerCounter){
+
+        int diceValue = (int)(Math.random()*6+1);
+
+        String msg = "The value of the dice is: " + diceValue;
+
+        listy.movePlayer(PlayerCounter, diceValue);
+
+        return msg;
+
+    }
+
     public void initializeCollection(int numPlayers){
 
         players = new Player[numPlayers];
@@ -80,13 +122,13 @@ public class Controler {
 
     }
 
-    public void addNodes(){
+    public void addNodes(int numPlayers){
 
         int rows = listy.getfVal(), columns = listy.getcVal();
 
         int totalNodes = rows*columns, counter = 1;
 
-        listy.createNodes(totalNodes, counter);       
+        listy.createNodes(totalNodes, counter, numPlayers);  
 
     }
 

@@ -63,9 +63,9 @@ public class Main {
 
     }
 
-    public void createGameBoard(){
+    public void createGameBoard(int numPlayers){
 
-        gameControler.addNodes();
+        gameControler.addNodes(numPlayers);
 
         showBoard();
 
@@ -83,9 +83,9 @@ public class Main {
 
     public void menu(boolean start){
 
-        gameApp.createGameBoard();
+        int numPlayers = gameApp.addPlayers();
 
-        gameApp.addPlayers();
+        gameApp.createGameBoard(numPlayers);
 
         System.out.println(gameControler.showPlayers(0)); 
 
@@ -99,45 +99,82 @@ public class Main {
 
         }else{
 
-            while(inGame){
-
-                System.out.println("The game has started");
-
-                System.out.println("Choose one of the next options ");
-
-                System.out.println(" - 1 Show the board");
-
-                System.out.println(" - 2 Show comodin Board");
-
-                int option = read.nextInt();
-
-                switch(option){
-
-                    case 1: gameApp.showBoard();
-
-                        break;
-                    
-                    case 2: gameApp.showComodins();
-
-                        break;
-
-                    case 3: 
-
-                        break;
-                    
-                    default:
-
-                        break;
-
-                }
-
-            }
+            gameApp.startGame(numPlayers, start);
 
         }
         
     }
 
-    public void addPlayers(){
+    public void startGame(int playerCounter, boolean start){
+
+        boolean inGame = start;
+
+        playerCounter = gameControler.verifyTurns(playerCounter);
+
+        String plyToken = gameControler.showPly(playerCounter);
+
+        System.out.println("The game has started");
+
+        while(inGame){
+
+            System.out.println(" It is the turn of the player " + plyToken);
+
+            System.out.println("Choose one of the next options ");
+
+            System.out.println(" - 1 Show the board");
+
+            System.out.println(" - 2 Show comodin Board");
+
+            System.out.println(" - 3 Throw the dice");
+
+            int option = read.nextInt();
+
+            switch(option){
+
+                case 1: gameApp.showBoard();
+
+                    break;
+                    
+                case 2: gameApp.showComodins();
+
+                    break;
+
+                case 3: gameApp.throwDice(playerCounter);
+
+                    System.out.println("Your turn has ended");
+
+                    showBoard();
+
+                    startGame(playerCounter+1, start);
+
+                    break;
+                    
+                default:
+
+                    System.out.println("Choose a valid option");
+
+                    break;
+
+            }
+
+        }
+
+
+    }
+
+    public void throwDice(int playerCounter){
+
+        System.out.println("Press enter to throw the dice");
+
+        read.nextLine();
+
+        read.nextLine();
+
+        System.out.println(gameControler.movePlayer(playerCounter));
+
+    }
+
+    public int addPlayers(){
 
         System.out.println(" - Only three players can play the game simultaneously");
 
@@ -162,6 +199,8 @@ public class Main {
             initializeCollection(numPlayers, counter);
 
         }
+
+        return numPlayers;
 
     }
 

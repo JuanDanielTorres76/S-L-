@@ -10,7 +10,9 @@ public class Node {
 
     private Comodin comodin; 
 
-    public Node(int value){
+    private boolean[] positions;
+
+    public Node(int value, int numPlayers){
 
         this.value = value;
 
@@ -19,6 +21,90 @@ public class Node {
         previous = null;
 
         comodin = null;
+
+        positions = new boolean[numPlayers];
+
+    }
+
+    public void initializePositions(int numPly, boolean st){
+
+        if(st = true){
+
+            positions[numPly] = true;
+
+        }else{
+
+            positions[numPly] = false;
+
+        }
+
+    }
+
+    public boolean ObtainPlayerPosition(int numPlayer){
+
+        boolean validation = false;
+
+        if(positions[numPlayer] == true){
+
+            validation = true;
+
+        }
+
+        return validation;
+
+    }
+
+    public void changePositionValue(int numPlayer){
+
+        if(positions[numPlayer] == true){
+
+            positions[numPlayer] = false;
+
+        }else{
+
+            positions[numPlayer] = true;
+
+        }
+
+    }
+
+    public String ShowPlayers(int counter){
+
+        String extention = "", token;
+
+        if(counter == 0){
+
+            token = "*";
+
+        }else if(counter == 1){
+
+            token = "$";
+
+        }else if(counter == 2){
+
+            token = "O";
+
+        }else{
+
+            token = "";
+
+        }
+
+        if(counter < positions.length){
+
+            if(positions[counter] == true){
+
+                extention += " " + token + " ";
+
+            }else{
+                
+                extention = ShowPlayers(counter+1);
+
+            }
+
+        }
+
+        return extention;
 
     }
 
@@ -59,11 +145,28 @@ public class Node {
     }
 
     public Comodin getComodin() {
+
         return comodin;
+
     }
 
     public void setComodin(Comodin comodin) {
+
         this.comodin = comodin;
+
+    }
+
+    
+    public boolean[] getPositions() {
+
+        return positions;
+
+    }
+
+    public void setPositions(boolean[] positions) {
+
+        this.positions = positions;
+
     }
   
 }

@@ -50,17 +50,19 @@ public class DoubleLinkedList {
 
     }
 
-    public void createNodes(int totalNodes, int counter){
+    public void createNodes(int totalNodes, int counter, int numPlayers){
         
-        Node node = new Node(counter);
+        Node node = new Node(counter, numPlayers);
 
         if(counter <= totalNodes){
 
             addNodeAtTail(node);
 
-            createNodes(totalNodes, counter+1);
+            createNodes(totalNodes, counter+1, numPlayers);
 
         }
+
+        fillBooleanArrays(head, 0);
 
     }
 
@@ -90,7 +92,7 @@ public class DoubleLinkedList {
 
         if(node.getValue() == value){
 
-            extention = " [ " + node.getValue() + " ]";
+            extention = " [ " + node.getValue() + " " + node.ShowPlayers(0) + " ]";
 
 
         }else{
@@ -213,8 +215,6 @@ public class DoubleLinkedList {
 
             if(pointer.getComodin() == null){
 
-                System.out.println("El comodin es nulo");
-
                 extention = " [ - ] ";
     
             }else{
@@ -223,15 +223,11 @@ public class DoubleLinkedList {
 
                     Snake obj = (Snake)pointer.getComodin();
 
-                    System.out.println("Identifier: " + obj.getIdentifier());
-
                     extention = " [ " + obj.getIdentifier() + " ] ";
 
                 }else{
 
                     Ladder obj = (Ladder)pointer.getComodin();
-
-                    System.out.println("Identifier: " + obj.getIdentifier());
 
                     extention = " [ " + obj.getIdentifier() + " ] ";
 
@@ -245,7 +241,6 @@ public class DoubleLinkedList {
 
     }
 
-
     public String showNdBoardByRows(int value, Node node, int cVal, boolean st){
 
         String board = "";
@@ -256,13 +251,13 @@ public class DoubleLinkedList {
 
                 if(value == tail.getValue()){
 
-                    board += " [ " + node.getValue() + " ]";
+                    board += " [ " + node.getValue() + " "+  node.ShowPlayers(0) + " ]";
 
                     board += showNdBoardByRows(value-1, node.getPrevious(), cVal, st);
 
                 }else if(value == head.getValue()){
 
-                    board += " [ " + node.getValue() + " ]";
+                    board += " [ " + node.getValue() + " " + node.ShowPlayers(0) + " ]";
 
                 }else if(value%cVal == 0 && value != tail.getValue()){
 
@@ -282,7 +277,7 @@ public class DoubleLinkedList {
 
                 }else{
 
-                    board += " [ " + node.getValue() + " ]";
+                    board += " [ " + node.getValue() + " " + node.ShowPlayers(0) +  " ]";
 
                     board += showNdBoardByRows(value-1, node.getPrevious(), cVal, st); 
 
@@ -322,7 +317,7 @@ public class DoubleLinkedList {
 
                     board += " \n";
 
-                    board += " [ " + node.getValue() + " ]";
+                    board += " [ " + node.getValue() + " " + node.ShowPlayers(0) + " ]";
 
                     board += showNdBoardByRows(value-1, node.getPrevious(), cVal, st) ;
 
@@ -520,27 +515,17 @@ public class DoubleLinkedList {
 
             pointer.setComodin(cm);
 
-            System.out.println("Node " + pointer.getValue() + " : " + pointer.getComodin().getBeggining().getValue() + " : " + pointer.getComodin().getEnd().getValue() );
-
         }
 
     }
 
     public void instanceLadders(int beggining, int end, int ladderCounter){
 
-        System.out.println("listy.instanceLadders runnning");
-
         ladderList[ladderCounter] = new Ladder(ladderCounter+1);
-
-        System.out.println( "Ladder id: " + ladderList[ladderCounter].getIdentifier()); // ver el identifier
 
         assignNodeBeggining(beggining, head, ladderList[ladderCounter]);
 
-        System.out.println("Beggining of Ladder " + ladderList[ladderCounter].getBeggining().getValue());
-
         assignNodeEnd(end, head, ladderList[ladderCounter]);
-
-        System.out.println("End of Ladder " + ladderList[ladderCounter].getEnd().getValue());
 
         changeNodeStatus(head, beggining, ladderList[ladderCounter]);
 
@@ -550,21 +535,13 @@ public class DoubleLinkedList {
 
     public void instanceSnakes(int headvalue, int tailValue, int snakeCounter){
 
-        System.out.println("listy.instanceSnakes runnning");
-
         String identifier = assignID(snakeCounter);
 
         snakeList[snakeCounter] = new Snake(identifier);
 
-        System.out.println("Snake id: " + snakeList[snakeCounter].getIdentifier());
-
         assignNodeBeggining(tailValue, head, snakeList[snakeCounter]);
 
-        System.out.println("Tail of Snake: " + snakeList[snakeCounter].getBeggining().getValue());
-
         assignNodeEnd(headvalue, head, snakeList[snakeCounter]);
-
-        System.out.println("Head of Snake: " + snakeList[snakeCounter].getEnd().getValue());
 
         changeNodeStatus(head, headvalue, snakeList[snakeCounter]);
 
@@ -606,6 +583,104 @@ public class DoubleLinkedList {
 
     }
 
+    public void fillBooleanArrays(Node pointer, int counter){
+
+        if(pointer.getValue() != tail.getNext().getValue()){
+
+            if(pointer.getValue() == head.getValue()){
+
+                boolean value = true;
+
+                if(counter < pointer.getPositions().length){
+
+                    pointer.initializePositions(counter, value);
+
+                    fillBooleanArrays(pointer, counter+1);
+
+                }else{
+
+                    counter = 0;
+
+                    fillBooleanArrays(pointer.getNext(), counter);
+
+                }
+                
+            }else{
+
+                boolean value = false;
+
+                if(counter < pointer.getPositions().length){
+
+                    pointer.initializePositions(counter, value);
+
+                    fillBooleanArrays(pointer, counter+1);
+
+                }else{
+
+                    counter = 0;
+
+                    fillBooleanArrays(pointer.getNext(), counter);
+
+                }
+
+            }
+
+        }
+
+    }
+
+    public int obtainPlayerPosition(int PlayerCounter, Node pointer){
+
+        int pos = -1;
+
+        if(pointer.getValue() != tail.getNext().getValue()){
+
+            if(pointer.ObtainPlayerPosition(PlayerCounter) == true){
+
+                pos = pointer.getValue();
+
+            }else{
+
+                obtainPlayerPosition(PlayerCounter, pointer.getNext());
+
+            }
+
+        }
+
+        return pos;
+
+    }
+
+    public void changePositionValue(Node pointer, int value, int playerCounter){
+
+        if(pointer.getValue() != tail.getNext().getValue()){
+
+            if(pointer.getValue() == value){
+
+                pointer.changePositionValue(playerCounter);
+    
+            }else{
+    
+                changePositionValue(pointer.getNext(), value, playerCounter);
+    
+            }
+
+        }
+
+    }
+
+    public void movePlayer(int playerCounter, int diceValue){
+
+        int currentPosition = obtainPlayerPosition(playerCounter, head);
+
+        int newPosition = currentPosition + diceValue;
+
+        changePositionValue(head, currentPosition, playerCounter);
+
+        changePositionValue(head, newPosition, playerCounter);
+
+
+    }
 
     public Node getTail() {
 

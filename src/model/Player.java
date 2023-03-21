@@ -6,11 +6,15 @@ public class Player {
 
     private String token;
 
+    private Score score;
+
     public Player(String name, String token){
 
         this.name = name;
 
         this.token = token;
+
+        score = null;
 
     }
 
@@ -44,6 +48,12 @@ public class Player {
         
     }
 
+    public Score getScore() {
+        return score;
+    }
 
+    public void setScore(Score score) {
+        this.score = score;
+    }
 
 }
