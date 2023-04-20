@@ -4,7 +4,7 @@ import java.util.Timer;
 
 import java.util.TimerTask;
 
-public class Score {
+public class Score{
 
     private int score;
 
@@ -45,6 +45,17 @@ public class Score {
         timer.scheduleAtFixedRate(task, 0, 1000); // Run task every second
     }
 
+
+    public int calculateTime(){
+
+        int value = (600 - this.timeRemaining) /6;
+
+        this.score = value;
+
+        return value;
+
+    }
+
     public void stopTimer() {
 
         timer.cancel();
@@ -68,5 +79,5 @@ public class Score {
         return timeRemaining;
         
     }
-    
+
 }

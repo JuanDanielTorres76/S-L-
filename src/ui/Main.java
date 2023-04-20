@@ -1,3 +1,5 @@
+package ui;
+
 import java.util.Scanner;
 
 import model.*;
@@ -99,21 +101,21 @@ public class Main {
 
         }else{
 
-            gameApp.startGame(numPlayers, start);
+            System.out.println("The game has started");
+
+            gameApp.startGame(numPlayers, start, numPlayers);
 
         }
         
     }
 
-    public void startGame(int playerCounter, boolean start){
+    public void startGame(int playerCounter, boolean start, int numPlayers){
 
         boolean inGame = start;
 
         playerCounter = gameControler.verifyTurns(playerCounter);
 
         String plyToken = gameControler.showPly(playerCounter);
-
-        System.out.println("The game has started");
 
         while(inGame){
 
@@ -143,9 +145,9 @@ public class Main {
 
                     System.out.println("Your turn has ended");
 
-                    showBoard();
+                    inGame = gameControler.validateInGame(inGame, numPlayers);
 
-                    startGame(playerCounter+1, start);
+                    startGame(playerCounter+1, inGame, numPlayers);
 
                     break;
                     
@@ -159,6 +161,37 @@ public class Main {
 
         }
 
+        gameApp.showFinalScore();
+
+        System.out.println("VALUE OF START " + Boolean.valueOf(start));
+
+        System.out.println("Do you want to restart the game?");
+
+        System.out.println("- 1 Yes");
+
+        System.out.println("- 2 No");
+
+        int restart = read.nextInt();
+
+        if(restart == 1){
+
+            menu(start);
+
+        }else{
+
+            System.out.println(" The game has ended ");
+
+        }
+        
+    }
+
+    public void showFinalScore(){
+
+        System.out.println("Here are the final scores of the players ");
+
+        String msg = gameControler.showScore();
+
+        System.out.println(msg);
 
     }
 

@@ -62,27 +62,7 @@ public class DoubleLinkedList {
 
         }
 
-        fillBooleanArrays(head, 0);
-
-    }
-
-    public String showNodes(int value, Node node){
-
-        String nodes = " "; 
-
-        if(node != null){
-
-            if(node.getValue() == value){
-
-                nodes += " [ " + node.getValue() + " ] ";
-
-                nodes += showNodes(value+1, node.getNext());
-
-            }
-
-        }
-
-        return nodes;
+        fillBooleanArray(head, 1);
 
     }
 
@@ -583,45 +563,63 @@ public class DoubleLinkedList {
 
     }
 
-    public void fillBooleanArrays(Node pointer, int counter){
+    public Boolean validateEnd(boolean inGame, int numPlayers){
 
-        if(pointer.getValue() != tail.getNext().getValue()){
+        boolean[] arr = new boolean[numPlayers];
+
+        for(int i = 0; i <arr.length; i++){
+
+            arr[i] = validateDiceAboveBoard(head, i, 0);
+
+        }
+
+        boolean validation = true;
+
+        for(boolean a: arr){
+
+            if(!a){
+
+                validation = false;
+
+                break;
+
+            }
+
+        }
+
+        inGame = tail.validateEnd(inGame, 0);
+
+        if(!inGame && validation){
+
+            return true;
+
+        }else{
+
+            return false;
+
+        }
+
+    }
+
+    public void fillBooleanArray(Node pointer, int counter){
+
+        if(counter<=tail.getValue()){
 
             if(pointer.getValue() == head.getValue()){
 
                 boolean value = true;
 
-                if(counter < pointer.getPositions().length){
+                pointer.initializePositions(value, counter);
 
-                    pointer.initializePositions(counter, value);
-
-                    fillBooleanArrays(pointer, counter+1);
-
-                }else{
-
-                    counter = 0;
-
-                    fillBooleanArrays(pointer.getNext(), counter);
-
-                }
+                fillBooleanArray(pointer.getNext(), counter+1);
                 
             }else{
 
                 boolean value = false;
 
-                if(counter < pointer.getPositions().length){
+                pointer.initializePositions(value, counter);
 
-                    pointer.initializePositions(counter, value);
-
-                    fillBooleanArrays(pointer, counter+1);
-
-                }else{
-
-                    counter = 0;
-
-                    fillBooleanArrays(pointer.getNext(), counter);
-
-                }
+                fillBooleanArray(pointer.getNext(), counter+1);
 
             }
 
@@ -629,31 +627,32 @@ public class DoubleLinkedList {
 
     }
 
-    public int obtainPlayerPosition(int PlayerCounter, Node pointer){
+    public int obtainPlayerPosition(int PlayerCounter, Node pointer, int counter){
 
-        int pos = -1;
-
-        if(pointer.getValue() != tail.getNext().getValue()){
+        if(counter <= fVal*cVal){
 
             if(pointer.ObtainPlayerPosition(PlayerCounter) == true){
-
-                pos = pointer.getValue();
-
+    
+                return pointer.getValue();     
+    
             }else{
-
-                obtainPlayerPosition(PlayerCounter, pointer.getNext());
-
+    
+                return obtainPlayerPosition(PlayerCounter, pointer.getNext(), counter+1);
+    
             }
+
+        } else{
+
+            return 0;
 
         }
 
-        return pos;
-
     }
 
+        
     public void changePositionValue(Node pointer, int value, int playerCounter){
 
-        if(pointer.getValue() != tail.getNext().getValue()){
+        if(pointer.getValue() != tail.getValue()){
 
             if(pointer.getValue() == value){
 
@@ -669,11 +668,101 @@ public class DoubleLinkedList {
 
     }
 
+    public int fallenIntoComodin(Node pointer, int position, int counter){
+
+        if(counter <= fVal*cVal){
+
+            if(pointer.getValue() == position){
+
+                if(pointer.getComodin() == null){
+
+                    return position;
+
+                }else{
+
+                    if(pointer.getComodin() instanceof Snake){
+
+                        System.out.println("Oh no! you´ve fallen into a Snake ");
+
+                        Snake obj = (Snake)pointer.getComodin();
+
+                        if(position == obj.getBeggining().getValue()){
+
+                            return obj.getEnd().getValue();
+
+                        }else{
+
+                            return position;
+
+                        }
+
+                    }else{
+
+                        Ladder obj = (Ladder)pointer.getComodin();
+
+                        System.out.println(" You´ve reached a Ladder");
+
+                        if(position == obj.getBeggining().getValue()){
+
+                            return obj.getEnd().getValue();
+
+                        }else{
+
+                            return position;
+
+                        }
+
+                    }
+
+                }
+
+            }else{
+
+                return fallenIntoComodin(pointer.getNext(), position, counter+1);
+
+            }
+
+        }else{
+
+            return position;
+
+        }
+
+    }
+
+    public boolean validateDiceAboveBoard(Node pointer, int numPlayer, int counter){
+
+        if(pointer.getValue() < tail.getValue()){
+
+            if(pointer.getPos(numPlayer)){
+
+                return true;
+
+            }else{
+
+                return validateDiceAboveBoard(pointer.getNext(), numPlayer, counter+1);
+
+            }   
+
+        }else if(pointer.getValue() == tail.getValue()){
+
+            return false;
+
+        }else{
+
+            return false;
+
+        }
+
+    }
+
     public void movePlayer(int playerCounter, int diceValue){
 
-        int currentPosition = obtainPlayerPosition(playerCounter, head);
+        int currentPosition = obtainPlayerPosition(playerCounter, head, 0);
 
         int newPosition = currentPosition + diceValue;
+
+        newPosition = fallenIntoComodin(head, newPosition, 0);
 
         changePositionValue(head, currentPosition, playerCounter);
 

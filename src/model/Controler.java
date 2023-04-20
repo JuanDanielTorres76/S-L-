@@ -4,13 +4,21 @@ import java.lang.Math;
 
 public class Controler {
 
+    protected Score sc;
+
     protected DoubleLinkedList listy; 
 
     protected Player[] players;
 
+    protected Stree scoreTree;
+
     public Controler(int cVal, int fVal ){
 
         listy = new DoubleLinkedList(cVal, fVal);
+
+        Score topTime = new Score(600);
+
+        topTime.startTimer();
 
     }
 
@@ -119,6 +127,39 @@ public class Controler {
 
             
         }
+
+    }
+
+    public String showScore(){
+
+        String msg  = showScore(0);
+
+        return msg;
+
+    }
+
+    private String showScore(int counter){
+
+        if(counter < players.length){
+
+            players[counter].calculateValueScore();
+
+            scoreTree.add(players[counter]);
+
+            showScore(counter+1);
+
+        }
+        
+        return scoreTree.inOrder(scoreTree.getRoot());
+
+
+    }
+
+    public boolean validateInGame(boolean inGame, int playerCounter){
+
+        inGame = listy.validateEnd(inGame, playerCounter);
+
+        return inGame;
 
     }
 

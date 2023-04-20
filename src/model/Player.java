@@ -14,13 +14,19 @@ public class Player {
 
         this.token = token;
 
-        score = null;
+        score = new Score(600);
 
     }
 
     public String toString(){
 
         return "The player " + getName() + " is identified with the token " + getToken();
+
+    }
+
+    public void calculateValueScore(){
+
+        this.score.calculateTime();
 
     }
 

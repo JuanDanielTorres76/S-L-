@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Arrays;
+
 public class Node {
     
     private Node next; 
@@ -26,27 +28,23 @@ public class Node {
 
     }
 
-    public void initializePositions(int numPly, boolean st){
+    public void initializePositions(boolean st, int counter){
 
-        if(st = true){
-
-            positions[numPly] = true;
-
-        }else{
-
-            positions[numPly] = false;
-
-        }
+        Arrays.fill(positions, st);
 
     }
 
     public boolean ObtainPlayerPosition(int numPlayer){
 
-        boolean validation = false;
+        boolean validation;
 
-        if(positions[numPlayer] == true){
+        if(positions[numPlayer]){
 
             validation = true;
+
+        }else{
+
+            validation = false;
 
         }
 
@@ -54,9 +52,39 @@ public class Node {
 
     }
 
+    public Boolean validateEnd(Boolean inGame, int counter){
+
+        if(counter < positions.length){
+
+            if(positions[counter]){
+
+                inGame = true;
+
+                return inGame;
+
+            }else{
+
+                inGame = false;
+                
+                return validateEnd(inGame, counter+1);
+
+            }
+
+        }
+
+        return inGame;
+
+    }
+
+    public boolean getPos(int numPlayer){
+
+        return positions[numPlayer];
+
+    }
+
     public void changePositionValue(int numPlayer){
 
-        if(positions[numPlayer] == true){
+        if(positions[numPlayer]){
 
             positions[numPlayer] = false;
 
@@ -96,9 +124,11 @@ public class Node {
 
                 extention += " " + token + " ";
 
+                extention+= ShowPlayers(counter+1);
+
             }else{
                 
-                extention = ShowPlayers(counter+1);
+                extention += ShowPlayers(counter+1);
 
             }
 
